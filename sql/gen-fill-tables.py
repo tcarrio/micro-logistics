@@ -136,14 +136,16 @@ AccountInsertBlock = AccountInsert + JOINER.join([
     )
     for id in IdsToFullNames if AccountIterate()]) + ENDSQL
 
-CardVendorInsertBlock = CardVendorInsert + JOINER.join(VendorList) + ENDSQL
+CardVendorInsertBlock = CardVendorInsert + JOINER.join([
+    CardVendTempl % vendor
+    for vendor in VendorList]) + ENDSQL
 
 addr=1
 CreditInsertBlock = CreditInsert + JOINER.join([
     CredValTempl % (
         random.randint(1000000000000000,9999999999999999),
         "%02d/%2d" % (random.randint(1,12),random.randint(18,25)),
-        random.randint(1,len(VendorList)),
+        random.randint(1,AccountCount-1),
         id,
         addr
     )
@@ -159,7 +161,7 @@ PackageInsertBlock = PackageInsert + JOINER.join([
         Dimensions(),
         random.randint(0,800),
         id,
-        random.randint(1,AccountCount)
+        random.randint(1,AccountCount-1)
     )
     for id in PackagesInSys]) + ENDSQL
 
