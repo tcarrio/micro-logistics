@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<title>Welcome Back!</title>
+<head>
+    <link rel="Stylesheet" href='/static/main.css' type="text/css" />
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="title">
+        <h1>Uh oh!</h1>
+        <p>{{error}}</p>
+    </div>
+    <div id="login-form">
+        <form action="/login" method="POST">
+            <h3>Customer ID:</h3>
+            <input type="text" name="firstname" /><br>
+            <h3>Password:</h3>
+            <input type="password" name="lastname" /><br>
+            <input type="submit" value="Login">
+        </form> 
+    </div>
+</body>
+</html>
