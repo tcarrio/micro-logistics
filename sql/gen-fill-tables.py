@@ -140,7 +140,7 @@ CardVendorInsertBlock = CardVendorInsert + JOINER.join([
     CardVendTempl % vendor
     for vendor in VendorList]) + ENDSQL
 
-addr=1
+addr=0
 CreditInsertBlock = CreditInsert + JOINER.join([
     CredValTempl % (
         random.randint(1000000000000000,9999999999999999),
