@@ -101,7 +101,7 @@ fullNames = [(firstNames[random.randint(0,len(firstNames))-1],
     lastNames[random.randint(0,len(lastNames))-1]) for x in range(AddressCount)]
 
 CustomerInsertBlock = CustomerInsert + JOINER.join([
-    CustValTempl % (f,l) for f,l in fullNames[:CustomerCount]]) + ENDSQL
+    CustValTempl % (f,l) for f,l in fullNames]) + ENDSQL
 
 # Find out how many addresses we're gonna put in
 IdsToFullNames = [x for x in range(len(fullNames)) if random.randint(0,1)]
@@ -168,5 +168,5 @@ print(CustomerInsertBlock)
 print(AddressInsertBlock)
 print(AccountInsertBlock)
 print(CardVendorInsertBlock)
-print(CardVendorInsertBlock)
+print(CreditInsertBlock)
 print(PackageInsertBlock)
