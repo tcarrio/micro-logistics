@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS Customer;
-DROP TABLE IF EXISTS Address;
-DROP TABLE IF EXISTS Account;
-DROP TABLE IF EXISTS CardVendor;
-DROP TABLE IF EXISTS Credit;
-DROP TABLE IF EXISTS Package;
-DROP TABLE IF EXISTS PackageDetails;
-DROP TABLE IF EXISTS Tracking;
 DROP TABLE IF EXISTS Status;
+DROP TABLE IF EXISTS Tracking;
+DROP TABLE IF EXISTS PackageDetails;
+DROP TABLE IF EXISTS Package;
+DROP TABLE IF EXISTS Credit;
+DROP TABLE IF EXISTS CardVendor;
+DROP TABLE IF EXISTS Account;
+DROP TABLE IF EXISTS Address;
+DROP TABLE IF EXISTS Customer;
 
 -- Setup tables required for Account
 CREATE TABLE Customer(
@@ -52,8 +52,8 @@ CREATE TABLE Credit(
     customerID INT NOT NULL,
     billAddress INT NOT NULL,
     FOREIGN KEY (customerID) references Customer(customerID),
-    FOREIGN KEY (billAddress) references Address(addressID)),
-    FOREIGN KEY (vendor) references CardVendor(vendorID);
+    FOREIGN KEY (billAddress) references Address(addressID),
+    FOREIGN KEY (vendor) references CardVendor(vendorID));
 
 -- Ready to roll with Package and related with Customer/Address finished
 CREATE TABLE Package(
@@ -74,6 +74,11 @@ CREATE TABLE PackageDetails(
     value INT NOT NULL,
     FOREIGN KEY (packageID) references Package(packageID));
 
+CREATE TABLE Status(
+    statusID INT NOT NULL AUTO_INCREMENT,
+    statusDescription VARCHAR(20),
+    PRIMARY KEY (statusID));
+
 CREATE TABLE Tracking(
     trackID INT NOT NULL AUTO_INCREMENT,
     location VARCHAR(50) NOT NULL,
@@ -83,8 +88,3 @@ CREATE TABLE Tracking(
     PRIMARY KEY(trackID),
     FOREIGN KEY (packageID) references Package(packageID),
     FOREIGN KEY (statusID) references Status(statusID));
-
-CREATE TABLE Status(
-    statusID INT NOT NULL AUTO_INCREMENT,
-    statusDescription VARCHAR(20),
-    PRIMARY KEY (statusID));
