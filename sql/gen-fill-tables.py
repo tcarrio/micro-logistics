@@ -94,8 +94,11 @@ CardVendCount = 200
 CreditInsert = "INSERT INTO Credit (cardNum,expDate,vendor,customerId,billAddress) values\n\t"
 CredValTempl = "('%s','%s',%d,%d,%d)"
 
-PackageInsert = "INSERT INTO Package (width,length,height,weight,customerId,destination) values\n\t"
-PackValTempl = "(%d,%d,%d,%d,%d,%d)"
+PackageInsert = "INSERT INTO Package (width,length,height,weight,isHazardous,isInternational,customerId,destination) values\n\t"
+PackValTempl = "(%d,%d,%d,%d,%s,%s,%d,%d)"
+
+PackageDetailsInsert = "INSERT INTO PackageDetails (packageID,content,value) values\n\t"
+PackDetValTempl = "(%d,'%s',%d)"
 
 StatusInsert = "INSERT INTO Status (statusID,statusDescription) values\n\t"
 StatusValTempl = "(%d,'%s')"
@@ -168,16 +171,43 @@ for c in IdsToFullNames:
     for x in range(1,10):
         PackagesInSys.append(c)
 
+DetailedPackages = []
+
+def DoHazardous(p):
+    global DetailedPackages
+    if(randint(0,10)==10):
+        DetailedPackages.append(p)
+        return 'TRUE'
+    return 'FALSE'
+
+def DoInternational(p):
+    # global DetailedPackages
+    # if(randint(0,2)>1 and DetailedPackages[-1]!=p):
+    #     DetailedPackages.append(p)
+    #     return 'TRUE'
+    return 'FALSE'
+
 PackageInsertBlock = PackageInsert + JOINER.join([
     PackValTempl % (
         randint(1,60),
         randint(1,60),
         randint(1,60),
         randint(0,800),
+        DoHazardous(id),
+        DoInternational(id),
         id+1,
         randint(1,AccountCount-1)
     )
     for id in PackagesInSys]) + ENDSQL
+
+
+PackageDetailsInsertBlock = PackageDetailsInsert + JOINER.join([
+    PackDetValTempl % (
+        p, # packageID
+        Content[randint(0,len(Content)-1)], # content
+        randint(1,100) # value
+    )
+    for p in DetailedPackages]) + ENDSQL
 
 StatusInsertBlock = StatusInsert + JOINER.join([
     StatusValTempl % (
@@ -239,5 +269,6 @@ print(AccountInsertBlock)
 print(CardVendorInsertBlock)
 print(CreditInsertBlock)
 print(PackageInsertBlock)
+print(PackageDetailsInsertBlock)
 print(StatusInsertBlock)
 print(TrackingInsertBlock)
