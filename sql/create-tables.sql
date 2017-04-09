@@ -24,7 +24,7 @@ CREATE TABLE Address(
     state VARCHAR(20) NOT NULL,
     zipcode INT NOT NULL,
     country VARCHAR(20) NOT NULL,
-    phoneNumber VARCHAR(10)
+    phoneNumber VARCHAR(10),
     PRIMARY KEY (addressID));
 
 CREATE TABLE Account(
