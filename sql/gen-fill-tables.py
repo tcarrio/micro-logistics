@@ -121,7 +121,7 @@ AddressInsertBlock = AddressInsert + JOINER.join([
     for custId in IdsToFullNames]) + ENDSQL
 
 # some totally jenky crap here to get some stuff working..
-addr=1
+addr=0
 def AccountIterate():
     global addr
     addr = addr + 1
@@ -172,3 +172,5 @@ print(AccountInsertBlock)
 print(CardVendorInsertBlock)
 print(CreditInsertBlock)
 print(PackageInsertBlock)
+
+print("There are a total of %d accounts" % AccountCount)
