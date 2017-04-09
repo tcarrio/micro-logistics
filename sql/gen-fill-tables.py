@@ -68,27 +68,27 @@ Statuses = {
 ### TEMPLATES
 
 CustomerInsert = "INSERT INTO Customer (fName,lName) values "
-CustValTempl = "(%s,%s)"
+CustValTempl = "('%s','%s')"
 CustomerCount = 200
 
 AddressInsert = "INSERT INTO Address (fullName,addressLine1,addressLine2,city,state,zipcode,country,phoneNumber) values "
-AddrValTempl = "(%s,%s,%s,%s,%s,%d,%s,%s)"
+AddrValTempl = "('%s','%s','%s','%s','%s',%d,'%s','%s')"
 AddressCount = 300
 
 AccountInsert = "INSERT INTO Account (balance,customerId,billAddress,shipAddress) values "
-AcctValTempl = "(%d,%s,%s,%s)"
+AcctValTempl = "(%d,'%s','%s','%s')"
 AccountCount = 200
 
 CardVendorInsert = "INSERT INTO CardVendor (vendorName) values "
-CardVendTempl = "(%s)"
+CardVendTempl = "('%s')"
 CardVendCount = 200
 
 CreditInsert = "INSERT INTO Credit (cardNum,expDate,vendor,customerId,billAddress) values "
-CredValTempl = "(%d,%s,%d,%d,%d)"
+CredValTempl = "(%d,'%s',%d,%d,%d)"
 
 
 PackageInsert = "INSERT INTO Package (dimension,weight,customerId,destination) values "
-PackValTempl = "(%s,%s,%d,%d)"
+PackValTempl = "('%s','%s',%d,%d)"
 Dimensions = lambda: "%dx%dx%d"%(random.randint(1,60),random.randint(1,60),random.randint(1,60))
 
 ### LET'S GET GOING
