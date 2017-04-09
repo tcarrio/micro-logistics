@@ -46,7 +46,7 @@ CREATE TABLE CardVendor(
     PRIMARY KEY (vendorID));
 
 CREATE TABLE Credit(
-    cardNum INT NOT NULL,
+    cardNum CHAR(16) NOT NULL,
     expDate CHAR(5) NOT NULL,
     vendor INT NOT NULL,
     customerID INT NOT NULL,
@@ -58,7 +58,9 @@ CREATE TABLE Credit(
 -- Ready to roll with Package and related with Customer/Address finished
 CREATE TABLE Package(
     packageID INT NOT NULL AUTO_INCREMENT,
-    dimension INT NOT NULL,
+    width INT NOT NULL,
+    length INT NOT NULL,
+    height INT NOT NULL,
     weight INT NOT NULL,
     isHazardous BOOLEAN DEFAULT FALSE,
     isInternational BOOLEAN DEFAULT FALSE,
