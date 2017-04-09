@@ -1,4 +1,7 @@
-import random
+from random import randint
+from random import randrange
+from datetime import timedelta
+from datetime import datetime
 
 ### SAMPLE DATA
 
@@ -44,7 +47,7 @@ VendorList = [ "Visa", "Mastercard", "American Express",
     "Capitol One", "Discover", "Citi" ]
 
 Streets = [ "E. Jack Lane", "Hoover Ave", "Water Rd", "Prentice Dr", "Steephollow Dr" ]
-StreetNumGenerator = lambda: random.randint(1,4000)
+StreetNumGenerator = lambda: randint(1,4000)
 
 Cities = [ "White Lake", "Rochester Hills", "Waterford", "Clarkston", 
     "Bloomfield Hills", "Auburn Hills", "Detroit", "Birmingham" ]
@@ -52,44 +55,53 @@ Cities = [ "White Lake", "Rochester Hills", "Waterford", "Clarkston",
 States = [ "Michigan", "Rhode Island", "New York", "California",
     "Iowa", "Tennessee", "Kentucky" ]
 
-ZIPCodes = lambda: random.randint(1,99999)
+ZIPCodes = lambda: randint(1,99999)
 
-phoneNumbers = lambda: str(random.randint(1000000000,9999999999))
+phoneNumbers = lambda: str(randint(1000000000,9999999999))
 
 Content = [ "Books","Movies","Electronics","Games" ]
 
-Statuses = {
-    1 : "In-Transit",
-    2 : "Delivered",
-    3 : "Building",
-    4 : "Processing Request"
+Statuses = {    
+    1 : "Processing Request",
+    2 : "Building",
+    3 : "In-Transit",
+    4 : "Delivered"
 }
+
+LocationGen = lambda: "%s, %s" % (
+    Cities[randint(0,len(Cities)-1)],
+    States[randint(0,len(States)-1)]
+)
 
 ### TEMPLATES
 
-CustomerInsert = "INSERT INTO Customer (fName,lName) values "
+CustomerInsert = "INSERT INTO Customer (fName,lName) values\n\t"
 CustValTempl = "('%s','%s')"
 CustomerCount = 200
 
-AddressInsert = "INSERT INTO Address (fullName,addressLine1,addressLine2,city,state,zipcode,country,phoneNumber) values "
+AddressInsert = "INSERT INTO Address (fullName,addressLine1,addressLine2,city,state,zipcode,country,phoneNumber) values\n\t"
 AddrValTempl = "('%s','%s','%s','%s','%s',%d,'%s','%s')"
 AddressCount = 300
 
-AccountInsert = "INSERT INTO Account (balance,customerId,billAddress,shipAddress) values "
+AccountInsert = "INSERT INTO Account (balance,customerId,billAddress,shipAddress) values\n\t"
 AcctValTempl = "(%d,%d,%d,%d)"
 AccountCount = 200
 
-CardVendorInsert = "INSERT INTO CardVendor (vendorName) values "
+CardVendorInsert = "INSERT INTO CardVendor (vendorName) values\n\t"
 CardVendTempl = "('%s')"
 CardVendCount = 200
 
-CreditInsert = "INSERT INTO Credit (cardNum,expDate,vendor,customerId,billAddress) values "
-CredValTempl = "(%d,'%s',%d,%d,%d)"
+CreditInsert = "INSERT INTO Credit (cardNum,expDate,vendor,customerId,billAddress) values\n\t"
+CredValTempl = "('%s','%s',%d,%d,%d)"
 
+PackageInsert = "INSERT INTO Package (width,length,height,weight,customerId,destination) values\n\t"
+PackValTempl = "(%d,%d,%d,%d,%d,%d)"
 
-PackageInsert = "INSERT INTO Package (dimension,weight,customerId,destination) values "
-PackValTempl = "('%s',%d,%d,%d)"
-Dimensions = lambda: "%dx%dx%d"%(random.randint(1,60),random.randint(1,60),random.randint(1,60))
+StatusInsert = "INSERT INTO Status (statusID,statusDescription) values\n\t"
+StatusValTempl = "(%d,'%s')"
+
+TrackingInsert = "INSERT INTO Tracking (location,lastUpdate,statusID,packageID) values\n\t"
+TrackingValTempl = "('%s','%s',%d,%d)"
 
 ### LET'S GET GOING
 
@@ -97,23 +109,23 @@ GEN_FILE = "fill-tables.sql" #likely irrelevant, I'm gonna pipe output with bash
 JOINER=",\n\t"
 ENDSQL=";"
 
-fullNames = [(firstNames[random.randint(0,len(firstNames))-1],
-    lastNames[random.randint(0,len(lastNames))-1]) for x in range(AddressCount)]
+fullNames = [(firstNames[randint(0,len(firstNames))-1],
+    lastNames[randint(0,len(lastNames))-1]) for x in range(AddressCount)]
 
 CustomerInsertBlock = CustomerInsert + JOINER.join([
     CustValTempl % (f,l) for f,l in fullNames]) + ENDSQL
 
 # Find out how many addresses we're gonna put in
-IdsToFullNames = [x for x in range(len(fullNames)) if random.randint(0,1)]
+IdsToFullNames = [x for x in range(len(fullNames)) if randint(0,1)]
 AccountCount = len(IdsToFullNames)
 
 AddressInsertBlock = AddressInsert + JOINER.join([
     AddrValTempl % (
         " ".join(fullNames[custId]),
-        "%d %s" % (StreetNumGenerator(),Streets[random.randint(0,len(Streets)-1)]),
+        "%d %s" % (StreetNumGenerator(),Streets[randint(0,len(Streets)-1)]),
         "", # line2
-        Cities[random.randint(0,len(Cities)-1)],
-        States[random.randint(0,len(States)-1)],
+        Cities[randint(0,len(Cities)-1)],
+        States[randint(0,len(States)-1)],
         ZIPCodes(),
         "United States",
         phoneNumbers()
@@ -129,8 +141,8 @@ def AccountIterate():
 
 AccountInsertBlock = AccountInsert + JOINER.join([
     AcctValTempl % (
-        random.randint(0,1000), #balance
-        id, #customerId
+        randint(0,1000), #balance
+        id+1, #customerId
         addr, #billAddress
         addr #shipAddress
     )
@@ -143,10 +155,10 @@ CardVendorInsertBlock = CardVendorInsert + JOINER.join([
 addr=0
 CreditInsertBlock = CreditInsert + JOINER.join([
     CredValTempl % (
-        random.randint(1000000000000000,9999999999999999),
-        "%02d/%2d" % (random.randint(1,12),random.randint(18,25)),
-        random.randint(1,AccountCount-1),
-        id,
+        "%d" % randint(1000000000000000,9999999999999999),
+        "%02d/%2d" % (randint(1,12),randint(18,25)),
+        randint(1,len(VendorList)),
+        id+1,
         addr
     )
     for id in IdsToFullNames if AccountIterate()]) + ENDSQL
@@ -158,12 +170,67 @@ for c in IdsToFullNames:
 
 PackageInsertBlock = PackageInsert + JOINER.join([
     PackValTempl % (
-        Dimensions(),
-        random.randint(0,800),
-        id,
-        random.randint(1,AccountCount-1)
+        randint(1,60),
+        randint(1,60),
+        randint(1,60),
+        randint(0,800),
+        id+1,
+        randint(1,AccountCount-1)
     )
     for id in PackagesInSys]) + ENDSQL
+
+StatusInsertBlock = StatusInsert + JOINER.join([
+    StatusValTempl % (
+        k,
+        v
+    )
+    for k,v in Statuses.items()]) + ENDSQL
+
+def RandDate(start, end):
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
+
+def IterDate():
+    global start_date
+    itermin = (0.25 * 24 * 60 * 60)
+    itermax = (3 * 24 * 60 * 60)
+    iteramount = randrange(itermin,itermax)
+    start_date = start_date + timedelta(seconds=iteramount)
+
+def PrintDate(d):
+    return d.strftime('%Y-%m-%d %H:%M:%S')
+
+TrackUpdates = []
+for p in PackagesInSys:
+    # set real package id
+    packageID = p+1
+    # pick a random date for this package to start shipping
+    start_date = RandDate(
+        datetime.strptime('1/1/2016 1:00 PM', '%m/%d/%Y %I:%M %p'),
+        datetime.now()
+    )
+    # move the date along for every successive status update
+    IterDate()
+    TrackUpdates.append((packageID,1,PrintDate(start_date)))
+    if(randint(0,1)>0):
+        IterDate()
+        TrackUpdates.append((packageID,2,PrintDate(start_date)))
+    for x in range(randint(1,4)):
+        IterDate()
+        TrackUpdates.append((packageID,3,PrintDate(start_date)))
+    IterDate()
+    TrackUpdates.append((packageID,4,PrintDate(start_date)))
+
+TrackingInsertBlock = TrackingInsert + JOINER.join([
+    TrackingValTempl % (
+        LocationGen(), #location
+        d, #lastUpdate
+        s, #statusID
+        p, #packageID
+    )
+    for p,s,d in TrackUpdates]) + ENDSQL
 
 # And output it for use
 print(CustomerInsertBlock)
@@ -172,5 +239,5 @@ print(AccountInsertBlock)
 print(CardVendorInsertBlock)
 print(CreditInsertBlock)
 print(PackageInsertBlock)
-
-print("There are a total of %d accounts" % AccountCount)
+print(StatusInsertBlock)
+print(TrackingInsertBlock)
