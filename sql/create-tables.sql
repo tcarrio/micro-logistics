@@ -47,7 +47,7 @@ CREATE TABLE CardVendor(
 
 CREATE TABLE Credit(
     cardNum INT NOT NULL,
-    expDate DATE NOT NULL,
+    expDate CHAR(5) NOT NULL,
     vendor INT NOT NULL,
     customerID INT NOT NULL,
     billAddress INT NOT NULL,

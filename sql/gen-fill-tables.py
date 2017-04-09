@@ -76,7 +76,7 @@ AddrValTempl = "('%s','%s','%s','%s','%s',%d,'%s','%s')"
 AddressCount = 300
 
 AccountInsert = "INSERT INTO Account (balance,customerId,billAddress,shipAddress) values "
-AcctValTempl = "(%d,'%s','%s','%s')"
+AcctValTempl = "(%d,%d,%d,%d)"
 AccountCount = 200
 
 CardVendorInsert = "INSERT INTO CardVendor (vendorName) values "
@@ -88,7 +88,7 @@ CredValTempl = "(%d,'%s',%d,%d,%d)"
 
 
 PackageInsert = "INSERT INTO Package (dimension,weight,customerId,destination) values "
-PackValTempl = "('%s','%s',%d,%d)"
+PackValTempl = "('%s',%d,%d,%d)"
 Dimensions = lambda: "%dx%dx%d"%(random.randint(1,60),random.randint(1,60),random.randint(1,60))
 
 ### LET'S GET GOING
