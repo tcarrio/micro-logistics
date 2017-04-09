@@ -79,7 +79,7 @@ AccountInsert = "INSERT INTO Account (balance,customerId,billAddress,shipAddress
 AcctValTempl = "(%d,%s,%s,%s)"
 AccountCount = 200
 
-CardVenderInsert = "INSERT INTO CardVendor (vendorName) values "
+CardVendorInsert = "INSERT INTO CardVendor (vendorName) values "
 CardVendTempl = "(%s)"
 CardVendCount = 200
 
@@ -89,24 +89,27 @@ CredValTempl = "(%d,%s,%d,%d,%d)"
 
 PackageInsert = "INSERT INTO Package (dimension,weight,customerId,destination) values "
 PackValTempl = "(%s,%s,%d,%d)"
+Dimensions = lambda: "%dx%dx%d"%(random.randint(1,60),random.randint(1,60),random.randint(1,60))
 
 ### LET'S GET GOING
 
 GEN_FILE = "fill-tables.sql" #likely irrelevant, I'm gonna pipe output with bash anyway
+JOINER=",\n\t"
+ENDSQL=";"
 
 fullNames = [(firstNames[random.randint(0,len(firstNames))-1],
     lastNames[random.randint(0,len(lastNames))-1]) for x in range(AddressCount)]
 
-CustomerInsertBlock = CustomerInsert + " ".join([
-    CustValTempl % (f,l) for f,l in fullNames[:CustomerCount]])
+CustomerInsertBlock = CustomerInsert + JOINER.join([
+    CustValTempl % (f,l) for f,l in fullNames[:CustomerCount]]) + ENDSQL
 
 # Find out how many addresses we're gonna put in
-PseudoAddressNames = [fn for fn in fullNames if random.randint(0,1)]
-AccountCount = len(PseudoAddressNames)
+IdsToFullNames = [x for x in range(len(fullNames)) if random.randint(0,1)]
+AccountCount = len(IdsToFullNames)
 
-AddressInsertBlock = AddressInsert + " ".join([
+AddressInsertBlock = AddressInsert + JOINER.join([
     AddrValTempl % (
-        " ".join(name),
+        " ".join(fullNames[custId]),
         "%d %s" % (StreetNumGenerator(),Streets[random.randint(0,len(Streets)-1)]),
         "", # line2
         Cities[random.randint(0,len(Cities)-1)],
@@ -115,14 +118,55 @@ AddressInsertBlock = AddressInsert + " ".join([
         "United States",
         phoneNumbers()
     )
-    for name in PseudoAddressNames])
+    for custId in IdsToFullNames]) + ENDSQL
 
-AccountInsertBlock = AccountInsert + " ".join([
+# some totally jenky crap here to get some stuff working..
+addr=1
+def AccountIterate():
+    global addr
+    addr = addr + 1
+    return True
+
+AccountInsertBlock = AccountInsert + JOINER.join([
     AcctValTempl % (
-        
+        random.randint(0,1000), #balance
+        id, #customerId
+        addr, #billAddress
+        addr #shipAddress
     )
-])
+    for id in IdsToFullNames if AccountIterate()]) + ENDSQL
+
+CardVendorInsertBlock = CardVendorInsert + JOINER.join(VendorList) + ENDSQL
+
+addr=1
+CreditInsertBlock = CreditInsert + JOINER.join([
+    CredValTempl % (
+        random.randint(1000000000000000,9999999999999999),
+        "%02d/%2d" % (random.randint(1,12),random.randint(18,25)),
+        random.randint(1,len(VendorList)),
+        id,
+        addr
+    )
+    for id in IdsToFullNames if AccountIterate()]) + ENDSQL
+
+PackagesInSys = []
+for c in IdsToFullNames:
+    for x in range(1,10):
+        PackagesInSys.append(c)
+
+PackageInsertBlock = PackageInsert + JOINER.join([
+    PackValTempl % (
+        Dimensions(),
+        random.randint(0,800),
+        id,
+        random.randint(1,AccountCount)
+    )
+    for id in PackagesInSys]) + ENDSQL
 
 # And output it for use
 print(CustomerInsertBlock)
 print(AddressInsertBlock)
+print(AccountInsertBlock)
+print(CardVendorInsertBlock)
+print(CardVendorInsertBlock)
+print(PackageInsertBlock)
