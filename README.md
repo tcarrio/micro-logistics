@@ -28,7 +28,7 @@ Uses Flask, MySQLdb, and Jinja2 web templates.
 To run the application, go to the `/python` directory and run the following: 
 
 ```bash
-pip2 install Flask,MySQLdb
+pip2 install Flask MySQLdb
 export FLASK_APP=serve.py
 flask run
  * Running on http://127.0.0.1:5000/
