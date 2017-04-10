@@ -17,8 +17,8 @@ To generate a randomized data file and create/import to database, run the follow
 
 ```bash
 python gen-fill-tables.py > fill-tables.sql
-mysql -h cse345.carrio.me -D project -u tlcarrio -p < create-tables.sql
-mysql -h cse345.carrio.me -D project -u tlcarrio -p < fill-tables.sql
+mysql -h cse345.carrio.me -D project -u web -p < create-tables.sql
+mysql -h cse345.carrio.me -D project -u web -p < fill-tables.sql
 ```
 
 `/python` contains the web server code for our application
