@@ -9,8 +9,8 @@ app = Flask(__name__)
 _session = {}
 db = MySQLdb.connect(
     host='cse345.carrio.me',
-    user='tlcarrio',
-    passwd='By$RLLupf#',
+    user='web',
+    passwd='CSE345Def@ult',
     db='project'
 )
 cur = db.cursor()
