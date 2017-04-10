@@ -1,8 +1,12 @@
 <ul>
+    {% if sesh['authenticated'] %}
     <li><a href="/">Home</a></li>
-    <li><a href="/packages">Packages</a></li>
+    {% else %}
+    <li><a href="/">Login</a></li>
+    {% endif %}
     <li><a href="/about">About</a></li>
     {% if  sesh['authenticated'] %}
+    <li><a href="/packages">Packages</a></li>
     <li><a href="/user">User</a></li>
     <li><a href="/logout">Logout</a></li>
     {% endif %}

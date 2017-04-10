@@ -34,7 +34,6 @@ def login():
     global _session
     # check database for customerID
     customer = request.form.get('customerID')
-    print(customer)
     if(customer and db_authenticate_customer(customer)):
         # set _session variables
         return redirect(url_for('home'))
@@ -103,8 +102,6 @@ def db_get_credit_for(id):
             tmp_card['country']=c[9]
             tmp_card['phone']=phone_number_formatted(c[10])
             cred.append(tmp_card)
-        for line in c:
-            print(line)
     return cred
 
 def db_get_account_for(id):
@@ -159,17 +156,13 @@ def db_get_customer_packages(id=None):
             p['international'] = 'Yes' if(row[6]) else 'No'
             p['destination']=db_get_location_by_id(row[7])
             list_of_packages.append(p)
-        for l in list_of_packages:
-            print(l)
     return list_of_packages
 
 def db_get_specific_package(package=None):
     global cur
     list_of_tracking_info = []
     if(package):
-        q = "SELECT * FROM Tracking WHERE packageID = %s;" % package
-        print(q)
-        cur.execute(q)
+        cur.execute("SELECT * FROM Tracking WHERE packageID = %s;" % package)
         for row in cur.fetchall():
             t = {}
             t['trackID']=row[0]
@@ -178,8 +171,6 @@ def db_get_specific_package(package=None):
             t['status']=db_get_status_for(row[3])
             t['packageID']=row[4]
             list_of_tracking_info.append(t)
-        for l in list_of_tracking_info:
-            print(l)
     return list_of_tracking_info
 
 def db_get_status_for(code):
@@ -206,7 +197,6 @@ def db_authenticate_customer(id,password=None):
     if(id):
         cur.execute("SELECT * FROM Customer WHERE customerID = %s;" % id)
         cust = cur.fetchone()
-        print(cust)
         if(cust != None):
             _session['authenticated'] = True
             _session['customerID'] = cust[0]
