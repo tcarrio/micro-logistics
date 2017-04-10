@@ -7,6 +7,54 @@
 <body>
     {% include 'navbar.html' %}
     <div class="title">
+        {% if packages %}
+        <h1>Your Packages:</h1>
+        <table class="center-table table-highlighter">
+            <tr>
+                <th>ID</th>
+                <th>Width</th>
+                <th>Length</th>
+                <th>Height</th>
+                <th>Weight</th>
+                <th>Hazardous</th>
+                <th>International</th>
+                <th>Destination</th>
+            </tr>
+        {% for p in packages %}
+            <tr>
+                <td><a href="/packages/{{p['id']}}">{{p['id']}}</a></td>
+                <td>{{p['width']}}</td>
+                <td>{{p['length']}}</td>
+                <td>{{p['height']}}</td>
+                <td>{{p['weight']}}</td>
+                <td>{{p['hazardous']}}</td>
+                <td>{{p['international']}}</td>
+                <td>{{p['destination']}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+        {% elif tracking %}
+        <h1>Tracking Information for Package ID {{tracking[0]['packageID']}}</h1>
+        <table class="center-table table-highlighter">
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Location</th>
+                <th>Date</th>
+            </tr>
+        {% for t in tracking %}
+            <tr>
+                <td>{{t['trackID']}}</td>
+                <td>{{t['status']}}</td>
+                <td>{{t['location']}}</td>
+                <td>{{t['lastUpdate']}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+        {% else %}
         <h1>Package Lookup!</h1>
+        <p>You must not have any packages to track!</p>
+        <p>I wish my life was as easy as yours..</p>
+        {% endif %}
     </div>
 </body>

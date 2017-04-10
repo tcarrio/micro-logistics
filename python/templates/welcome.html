@@ -7,11 +7,16 @@
 <body>
     {% include 'navbar.html' %}
     <div class="title">
+        {% if error %}
+        <h1>Uh oh!</h1>
+        <p>{{error}}.</p>
+        {% else %}
         <h1>Hello, User!</h1>
         <p>Please login below to check your packages!</p>
+        {% endif %}
     </div>
     <div id="login-form">
-        <form action="/login" method="POST">
+        <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
             <h3>Customer ID:</h3>
             <input type="text" name="customerID" /><br>
             <h3>Password:</h3>

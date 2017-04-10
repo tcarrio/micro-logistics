@@ -37,3 +37,21 @@ li a:hover {
 .title {
     text-align:center;
 }
+
+.center-table {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+}
+
+.table-highlighter tr:hover {
+    background-color: #ccc;
+    
+}
+
+.center-table tr th {
+    padding: 1em;
+}
+.center-table tr td {
+    padding: 1em;
+}

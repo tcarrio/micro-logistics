@@ -1,0 +1,90 @@
+<!doctype html>
+
+<title>Welcome Back!</title>
+<head>
+    <link rel="Stylesheet" href='/static/main.css' type="text/css" />
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="title">
+        {% if account %}
+        <h1>Your Account(s):</h1>            
+            {% for a in account %}
+            <table class="center-table">
+                <tr>
+                    <th colspan="4">Account Number</th>
+                    <th colspan="5">Balance</th>
+                </tr>
+                <tr>
+                    <td colspan="4">{{a['misc']['accountNum']}}</td>
+                    <td colspan="5">${{a['misc']['balance']}}</td>
+                </tr>
+                <tr>
+                    <th colspan="9">Billing Information</th>
+                </tr>
+                <tr>
+                    <td>{{a['bill']['fullName']}}</td>
+                    <td>{{a['bill']['addr1']}}</td>
+                    <td>{{a['bill']['addr2']}}</td>
+                    <td>{{a['bill']['city']}}</td>
+                    <td>{{a['bill']['state']}}</td>
+                    <td>{{a['bill']['zipcode']}}</td>
+                    <td>{{a['bill']['country']}}</td>
+                    <td>{{a['bill']['phone']}}</td>
+                </tr>
+                <tr>
+                    <th colspan="9">Shipping Information</th>
+                </tr>
+                <tr>
+                    <td>{{a['ship']['fullName']}}</td>
+                    <td>{{a['ship']['addr1']}}</td>
+                    <td>{{a['ship']['addr2']}}</td>
+                    <td>{{a['ship']['city']}}</td>
+                    <td>{{a['ship']['state']}}</td>
+                    <td>{{a['ship']['zipcode']}}</td>
+                    <td>{{a['ship']['country']}}</td>
+                    <td>{{a['ship']['phone']}}</td>
+                </tr>
+            </table>
+        {% endfor %}
+        </table>
+        {% endif %}
+
+        {% if credit %}
+        <h1>Credit Card Information</h1>
+        <table class="center-table">
+            <tr>
+                <th>Card Number</th>
+                <th>Exp. Date</th>
+                <th>Vendor</th>
+                <th>Name</th>
+                <th colspan="2">Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zipcode</th>
+                <th>Country</th>
+                <th>Phone</th>
+            </tr>
+            {% for c in credit %}
+            <tr>
+                <td>{{c['cardNum']}}</td>
+                <td>{{c['expDate']}}</td>
+                <td>{{c['vendor']}}</td>
+                <td>{{c['fullName']}}</td>
+                <td>{{c['addr1']}}</td>
+                <td>{{c['addr2']}}</td>
+                <td>{{c['city']}}</td>
+                <td>{{c['state']}}</td>
+                <td>{{c['zipcode']}}</td>
+                <td>{{c['country']}}</td>
+                <td>{{c['phone']}}</td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+        </table>
+        {% if not credit and not account %}
+        <h1>Nothing here!</h1>
+        <p>You must not have any accounts or credit cards linked to our service!</p>
+        {% endif %}
+    </div>
+</body>
