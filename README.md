@@ -1,4 +1,6 @@
-# cse345-project
+# micro-logistics
+
+### a small web service for tracking shipping info using flask and mysql
 
 Final work setup
 
